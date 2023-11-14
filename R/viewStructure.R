@@ -14,19 +14,24 @@
 #'     Molecular Data_. R package version 0.1.2,
 #'     <https://CRAN.R-project.org/package=r3dmol>.
 #'
-#' @example
-#' Example
+#' @examples
+#' # library(bio3d)
+#' # Load and visualize an AlphaFold prediction.
+#' 6ofsPredictedFile <- system.file("extdata", "6ofs_predicted.pdb",
+#'                                  package = "PDBCleanup")
+#' 6ofsPredicted <- bio3d::read.pdb(6ofsPredictedFile)
+#' viewStructure(6ofsPredicted)
 #'
 #' @export
 #' @import r3dmol
 viewStructure <- function(structure) {
   # Create the 3D model from the structure
-  model3d <- m_bio3d(structure)
+  model3d <- r3dmol::m_bio3d(structure)
   # Visualize the 3D model
-  structureVisual <- r3dmol() %>%
-    m_add_model(data = model3d) %>%
-    m_zoom_to() %>%
-    m_set_style(style = m_style_cartoon(color = "#00cccc"))
+  structureVisual <- r3dmol::r3dmol() %>%
+    r3dmol::m_add_model(data = model3d) %>%
+    r3dmol::m_zoom_to() %>%
+    r3dmol::m_set_style(style = r3dmol::m_style_cartoon(color = "#00cccc"))
 
   return(structureVisual)
 }

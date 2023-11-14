@@ -37,20 +37,31 @@
 #'     Chemical Reviews 2019 119 (3), 1626-1665.
 #'     https://doi.org/10.1021/acs.chemrev.8b00290
 #'
-#' @example
-#' Example
+#' @examples
+#' # library(bio3d)
+#' # Select high quality regions in an AlphaFold prediction.
+#' 6ofsPredictedFile <- system.file("extdata", "6ofs_predicted.pdb",
+#'                                  package = "PDBCleanup")
+#' 6ofsPredicted <- bio3d::read.pdb(6ofsPredictedFile)
+#' # Use default threshold of >= 70 for predicted structures
+#' 6ofsPredictedHighRes <- selectHighResolution(structure = 6ofs_predicted,
+#'                                              predicted = TRUE)
+#'
+#' # Select high quality regions in an experimental prediction.
+#' 6ofsExperimentalFile <- system.file("extdata", "6ofs_experimental.pdb",
+#'                                     package = "PDBCleanup")
+#' 6ofsExperimental <- bio3d::read.pdb(6ofsExperimentalFile)
+#' # Use custom threshold of <= 80, or < 1.75 A mean deviation
+#' 6ofsExperimentalHighRes <- selectHighResolution(structure = 6ofsExperimental,
+#'                                                 predicted = FALSE,
+#'                                                 threshold = 80)
 #'
 #' @export
 #' @importFrom bio3d atom.select trim
 selectHighResolution <- function(structure,
-                                 predicted = TRUE,
+                                 predicted,
                                  threshold = NA) {
-  # Create a copy of the structure to select high resolution regions
-  selectionAll <- bio3d::atom.select(pdb = structure,
-                                     resno = unique(structure$atom$resno))
-  highResStructure <- bio3d::trim(pdb = structure, selectionAll)
-  atoms <- highResStructure$atom
-
+  atoms <- structure$atom
   if (predicted) { # Predicted structure, select high B-factor
     if (is.na(threshold)) { # Default threshold is 70
       threshold = 70
@@ -58,29 +69,25 @@ selectHighResolution <- function(structure,
       ;
     }
 
-    # Select regions above B-factor threshold
-    highResAtoms <- atoms[atoms$"b" >= threshold, ]
-    highResStructure$atom <- highResAtoms
+    # Select residues above B-factor threshold
+    highResolutionIndices <- unique(atoms[atoms$"b" >= threshold, "resno"])
   } else { # Not predicted structure, select low B-factor
-    if (is.na(threshold)) { # Default threshold is 60
-      threshold = 60
+    if (is.na(threshold)) { # Default threshold is 100
+      threshold = 100
     } else {
       ;
     }
 
     # Select regions below B-factor threshold
-    highResAtoms <- atoms[atoms$"b" <= threshold, ]
+    highResolutionIndices <- unique(atoms[atoms$"b" <= threshold, "resno"])
   }
 
-  # Update the structure's atom attribute
-  highResStructure$atom <- highResAtoms
-  # Update the structure's xyz attribute
-  highResxyz <- as.matrix(highResAtoms[c("x", "y", "z")])
-  highResxyz <- matrix(highResxyz, nrow = 1, byrow = TRUE) # Reshape
-  class(highResxyz) <- class(structure$xyz)
-  highResStructure$xyz <- highResxyz
-  # Update the structure's Calpha attribute
-  highResCalpha <- (highResAtoms$elety == "CA")
+  # Trim the structure to the high resolution residues
+  highResolutionSelection <- bio3d::atom.select(pdb = structure,
+                                                resno = highResolutionIndices)
+  highResStructure <- bio3d::trim(pdb = structure, highResolutionSelection)
+  # Trim removes sequence regions, so copy full sequence
+  highResStructure$seqres <- structure$seqres
 
   return(highResStructure)
 }

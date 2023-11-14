@@ -4,7 +4,7 @@
 \alias{selectHighResolution}
 \title{Select High Resolution Regions of a Protein Structure}
 \usage{
-selectHighResolution(structure, predicted = TRUE, threshold = NA)
+selectHighResolution(structure, predicted, threshold = NA)
 }
 \arguments{
 \item{structure}{A protein structure of class "pdb" (Bio3d format) to extract
@@ -33,6 +33,26 @@ meaning high B-factor indicates high resolution, or an experimental
 structure, meaning low B-factor indicates high resolution. They can
 optionally provide a threshold value, otherwise the function uses a default
 threshold.
+}
+\examples{
+# library(bio3d)
+# Select high quality regions in an AlphaFold prediction.
+6ofsPredictedFile <- system.file("extdata", "6ofs_predicted.pdb",
+                                 package = "PDBCleanup")
+6ofsPredicted <- bio3d::read.pdb(6ofsPredictedFile)
+# Use default threshold of >= 70 for predicted structures
+6ofsPredictedHighRes <- selectHighResolution(structure = 6ofs_predicted,
+                                             predicted = TRUE)
+
+# Select high quality regions in an experimental prediction.
+6ofsExperimentalFile <- system.file("extdata", "6ofs_experimental.pdb",
+                                    package = "PDBCleanup")
+6ofsExperimental <- bio3d::read.pdb(6ofsExperimentalFile)
+# Use custom threshold of <= 80, or < 1.75 A mean deviation
+6ofsExperimentalHighRes <- selectHighResolution(structure = 6ofsExperimental,
+                                                predicted = FALSE,
+                                                threshold = 80)
+
 }
 \references{
 Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.

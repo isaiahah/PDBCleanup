@@ -11,12 +11,21 @@ viewStructure(structure)
 visualize as a 3D model.}
 }
 \value{
-NULL. As a side effect, a browser window is opened with an
-interactive interface showing the 3D structure model.
+The interactive viewer showing the 3D structure model. Shown in the
+viewer in RStudio, otherwise shown in a browser window.
 }
 \description{
 A function to visualize the provided structure with a 3D cartoon model.
 This function opens a browser window with the interactive 3D model.
+}
+\examples{
+# library(bio3d)
+# Load and visualize an AlphaFold prediction.
+6ofsPredictedFile <- system.file("extdata", "6ofs_predicted.pdb",
+                                 package = "PDBCleanup")
+6ofsPredicted <- bio3d::read.pdb(6ofsPredictedFile)
+viewStructure(6ofsPredicted)
+
 }
 \references{
 Su W, Johnston B (2021). \emph{r3dmol: Create Interactive 3D Visualizations of
