@@ -7,7 +7,7 @@
 viewStructure(structure)
 }
 \arguments{
-\item{structure}{A protein structure of class "pdb" (from Bio3d) to
+\item{structure}{A protein structure of class "pdb" (from bio3d) to
 visualize as a 3D model.}
 }
 \value{
@@ -21,10 +21,10 @@ This function opens a browser window with the interactive 3D model.
 \examples{
 # library(bio3d)
 # Load and visualize an AlphaFold prediction.
-6ofsPredictedFile <- system.file("extdata", "6ofs_predicted.pdb",
+predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
                                  package = "PDBCleanup")
-6ofsPredicted <- bio3d::read.pdb(6ofsPredictedFile)
-viewStructure(6ofsPredicted)
+predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
+viewStructure(predicted6ofs)
 
 }
 \references{

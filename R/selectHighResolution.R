@@ -8,7 +8,7 @@
 #' optionally provide a threshold value, otherwise the function uses a default
 #' threshold.
 #'
-#' @param structure A protein structure of class "pdb" (Bio3d format) to extract
+#' @param structure A protein structure of class "pdb" (bio3d format) to extract
 #'     high resolution regions from.
 #' @param predicted A boolean indicating whether the provided structure is a
 #'     predicted structure. If TRUE, select regions with high B-factor as
@@ -40,19 +40,19 @@
 #' @examples
 #' # library(bio3d)
 #' # Select high quality regions in an AlphaFold prediction.
-#' 6ofsPredictedFile <- system.file("extdata", "6ofs_predicted.pdb",
+#' predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
 #'                                  package = "PDBCleanup")
-#' 6ofsPredicted <- bio3d::read.pdb(6ofsPredictedFile)
+#' predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
 #' # Use default threshold of >= 70 for predicted structures
-#' 6ofsPredictedHighRes <- selectHighResolution(structure = 6ofs_predicted,
+#' predicted6ofsHighRes <- selectHighResolution(structure = predicted6ofs,
 #'                                              predicted = TRUE)
 #'
 #' # Select high quality regions in an experimental prediction.
-#' 6ofsExperimentalFile <- system.file("extdata", "6ofs_experimental.pdb",
+#' experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
 #'                                     package = "PDBCleanup")
-#' 6ofsExperimental <- bio3d::read.pdb(6ofsExperimentalFile)
+#' experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
 #' # Use custom threshold of <= 80, or < 1.75 A mean deviation
-#' 6ofsExperimentalHighRes <- selectHighResolution(structure = 6ofsExperimental,
+#' experimental6ofsHighRes <- selectHighResolution(structure = experimental6ofs,
 #'                                                 predicted = FALSE,
 #'                                                 threshold = 80)
 #'
@@ -61,6 +61,11 @@
 selectHighResolution <- function(structure,
                                  predicted,
                                  threshold = NA) {
+  # Check structure argument
+  if (!("pdb" %in% class(structure))) {
+    stop("Provided structure must be a pdb object from bio3d")
+  }
+
   atoms <- structure$atom
   if (predicted) { # Predicted structure, select high B-factor
     if (is.na(threshold)) { # Default threshold is 70

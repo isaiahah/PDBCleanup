@@ -3,7 +3,7 @@
 #' A function to visualize the provided structure with a 3D cartoon model.
 #' This function opens a browser window with the interactive 3D model.
 #'
-#' @param structure A protein structure of class "pdb" (from Bio3d) to
+#' @param structure A protein structure of class "pdb" (from bio3d) to
 #'    visualize as a 3D model.
 #'
 #' @returns The interactive viewer showing the 3D structure model. Shown in the
@@ -17,14 +17,19 @@
 #' @examples
 #' # library(bio3d)
 #' # Load and visualize an AlphaFold prediction.
-#' 6ofsPredictedFile <- system.file("extdata", "6ofs_predicted.pdb",
+#' predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
 #'                                  package = "PDBCleanup")
-#' 6ofsPredicted <- bio3d::read.pdb(6ofsPredictedFile)
-#' viewStructure(6ofsPredicted)
+#' predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
+#' viewStructure(predicted6ofs)
 #'
 #' @export
 #' @import r3dmol
 viewStructure <- function(structure) {
+  # Check structure argument
+  if (!("pdb" %in% class(structure))) {
+    stop("Provided structure must be a pdb object from bio3d")
+  }
+
   # Create the 3D model from the structure
   model3d <- r3dmol::m_bio3d(structure)
   # Visualize the 3D model
