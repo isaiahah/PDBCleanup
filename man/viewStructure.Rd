@@ -28,7 +28,7 @@ viewStructure(predicted6ofs)
 
 }
 \references{
-Su W, Johnston B (2021). \emph{r3dmol: Create Interactive 3D Visualizations of
-Molecular Data}. R package version 0.1.2,
+Su W, Johnston B (2021). r3dmol: Create Interactive 3D Visualizations of
+Molecular Data. R package version 0.1.2,
 \url{https://CRAN.R-project.org/package=r3dmol}.
 }
