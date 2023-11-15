@@ -1,12 +1,12 @@
 # PDBCleanup
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 ## Description
+
 PDBCleanup is an R package developed as part of the University of Toronto Fall 2023 course BCB410. It provides utilities for improving the quality of PDB protein structure files by selecting high resolution regions and improving relative domain positions by superimposing individual regions against corresponding regions of another reference protein structure. It further allows visualization of a quality score along an input protein's sequence, visualization of the 3D protein structure produced after selecting high quality regions and performing superimposition, and visualization of the structural difference between a pair of protein structures.
 
 This package is beneficial as a pre-processing step before performing analysis using protein structural data. It is compatible with other common structural biology packages but provides new highly customizable functions to streamline the first steps of structural data preparation.
+
+PDBCleanup was designed with AlphaFold predicted protein structures in mind, which often contain poorly predicted regions (indicated by low pLLDT scores in the B-factor column) or misaligned domains. However, it can be used for any protein structures, including experimental protein structures.
 
 PDBCleanup was developed in an environment using `R version 4.3.1` on an `aarch64-apple-darwin20 (64-bit)` platform running `macOS Sonoma 14.0`.
 
@@ -22,24 +22,47 @@ library("PDBCleanup")
 ```
 
 ## Overview
-```
+
+```         
 ls("package:PDBCleanup")
 data(package = "PDBCleanup") 
 browseVignettes("PDBCleanup")
 ```
 
-There are X functions in `PDBCleanup`:
+There are 4 functions in `PDBCleanup`:
+
+1.  `selectHighResolution`: A function to select high resolution regions in a protein structure. High resolution regions are selected using B-factor. The user provides a structure loaded using `bio3d` and whether the structure is an AlphaFold predicted structure, meaning high B-factor indicates high resolution, or an experimental structure, meaning low B-factor indicates high resolution. They can optionally provide a threshold value, otherwise the function uses a default threshold. The function returns a structure compatible with `bio3d` functions for later analysis.
+
+2.  `plotProteinQuality`: A function to visualize the B-factor of a `bio3d` protein structure as a bar plot along the sequence. The user specifies whether the structure is predicted or experimental to specify the y-axis label and gives a custom plot title.
+
+3.  `alignDomains`: A function to align a mobile protein structure against a fixed template protein structure by independently aligning each pair of provided domains. The locations of atoms in the mobile protein structure which are not part of a domain do not move. It both accepts and returns protein structures compatible with `bio3d` functions.
+
+4.  `viewStructure`: A function to visualize the provided structure with a 3D cartoon model. This function opens a browser window with the interactive 3D protein model.
+
+Below is a flowchart describing data preparation possible with this package.
+
+![](./inst/extdata/USAGES.png)
+
+See `help(package = "PDBCleanup")` for further details and references provided by `citation("PDBCleanup")`.
 
 ## Contributions
+
 This package was created by Isaiah Hazelwood.
 
+Several functions from the `bio3d` are used for structure analysis, including `atom.select` and `trim` to select subsets of a structure and `fit.xyz` to perform domain alignments. The `ggplot2` package is used for creating plots and data representations. The `r3dmol` package is used for creating the 3D visualization of a protein structure.
+
 ## Acknowledgements
+
 This package was developed as part of an assessment for 2023 BCB410H: Applied Bioinformatics course at the University of Toronto, Toronto, Canada. PDBCleanup welcomes issues, enhancement requests, and other contributions. To submit an issue, use the GitHub issues.
 
-
 ## References
+
 Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.
 
-Jumper, J., Evans, R., Pritzel, A. et al. Highly accurate protein structure prediction with AlphaFold. Nature 596, 583–589 (2021). https://doi.org/10.1038/s41586-021-03819-2
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
 
-Zhoutong Sun, Qian Liu, Ge Qu, Yan Feng, and Manfred T. Reetz. Utility of B-Factors in Protein Science: Interpreting Rigidity, Flexibility, and Internal Motion and Engineering Thermostability. Chemical Reviews 2019 119 (3), 1626-1665. https://doi.org/10.1021/acs.chemrev.8b00290
+Jumper, J., Evans, R., Pritzel, A. et al. Highly accurate protein structure prediction with AlphaFold. Nature 596, 583--589 (2021). <https://doi.org/10.1038/s41586-021-03819-2>
+
+Su W, Johnston B (2021). \_r3dmol: Create Interactive 3D Visualizations of Molecular Data\_. R package version 0.1.2, <https://CRAN.R-project.org/package=r3dmol>.
+
+Zhoutong Sun, Qian Liu, Ge Qu, Yan Feng, and Manfred T. Reetz. Utility of B-Factors in Protein Science: Interpreting Rigidity, Flexibility, and Internal Motion and Engineering Thermostability. Chemical Reviews 2019 119 (3), 1626-1665. <https://doi.org/10.1021/acs.chemrev.8b00290>

@@ -1,0 +1,125 @@
+---
+title: "Introduction_PDBCleanup"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction_PDBCleanup}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+`PDBCleanup` is an R package designed to preprocess protein structure files (in the PDB format) for future analysis by removing low quality regions and aligning individual domains against another reference structure. It was designed with AlphaFold structures in mind, which often have poorly predicted regions (indicated by a low pLLDT in the B-factor column) and poorly arrange domains.
+
+To download **PDBCleanup**, use the following commands:
+
+``` r
+require("devtools")
+devtools::install_github("isaiahah/PDBCleanup", build_vignettes = TRUE)
+library("PDBCleanup")
+```
+
+To list all sample functions available in the package:
+
+``` r
+ls("package:PDBCleanup")
+```
+
+To list all sample datasets available in the package:
+
+``` r
+data(package = "TestingPackage")
+```
+
+## Workflow
+
+We will show an average workflow with `PDBCleanup` on structures of a zinc protease in E. Coli. There are two structures for this protein: one from an experiment, recorded in the PDB with ID 6OFS, and one from AlphaFold.
+
+### Step 1: Loading structures
+
+These two structures are provided in the `PDBCleanup` package. However, the user can alternatively download them from the internet via the PDB or AlphaFold database or download them via other R packages such as `bio3d` or `protti`. The file origin does not matter, but they must be loaded into `R` using `bio3d`. `PDBCleanup` is compatible with `bio3d` `pdb` class objects to fit into analysis workflows using `bio3d`.
+
+``` r
+# Load the AlphaFold prediction.
+predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",         
+                                 package = "PDBCleanup")
+predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
+
+# Load the experimental prediction
+experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
+                                    package = "PDBCleanup")
+experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
+```
+
+### Step 2: Visualizing structures
+
+Before continuing in analysis, it is helpful to visualize the structures in 3D. `PDBCleanup` offers the `viewStructure` function to visualize loaded structures:
+
+``` r
+# This is not guaranteed to be stable within a Vignette
+# PDBCleanup::viewStructure(predicted6ofs)
+# PDBCleanup::viewStructure(experimental6ofs)
+```
+
+### Step 3: Selecting High Quality Regions
+
+One possible structure preparation step is creating structures with the only high-quality regions from the structure. This is most applicable for AlphaFold structures, as a region with pLDDT \< 70 is unreliable, but can also be applied to experimental structures to select regions with low B-factor corresponding to low variation in residue position.
+
+`PDBCleanup` offers the `selectHighResolution` function for this purpose. It requires the protein structure, whether the protein structure is predicted or experimental (to interpret the B-factor column), and a threshold to define high-quality regions.
+
+``` r
+# Use default threshold of >= 70 for predicted structures
+predicted6ofsHighRes <- PDBCleanup::selectHighResolution(
+    structure = predicted6ofs,
+    predicted = TRUE
+  )
+                                             
+# Use custom threshold of <= 80, or < 1.75 A mean deviation
+experimental6ofsHighRes <- PDBCleanup::selectHighResolution(
+    structure = experimental6ofs,
+    predicted = FALSE,
+    threshold = 80
+)
+```
+
+The high-quality structures created from this function can be visualized to see which regions have been removed.
+
+``` r
+# PDBCleanup::viewStructure(predicted6ofsHighRes)
+# PDBCleanup::viewStructure(experimental6ofsHighRes)
+```
+
+`PDBCleanup` also provides the `plotProteinQuality` function to represent the quality along the protein sequence in a bar plot. This provides a more sequence-oriented visualization of the high quality regions. The function accepts the protein structure, whether the protein structure is predicted or experimental (to label the y-axis), and a title for the plot.
+
+``` r
+PDBCleanup::plotProteinQuality(predicted6ofs,
+                               title = "Quality of Predicted 6ofs structure",
+                               predicted = TRUE)
+PDBCleanup::plotProteinQuality(experimental6ofs,
+                               title = "Quality of Experimental 6ofs structure",
+                               predicted = False)
+```
+
+### Step 4: Domain Alignment
+
+Another possible structure preparation step is aligning each domain of one structure against that domain in another structure, to use the overall shape of the latter structure with the local predictions of the former structure. This is important for the zinc protease structure considered here, as the predicted and experimental structures place the domains in very different positions relative to one another.
+
+`PDBCleanup` provides the `alignDomains` function to perform this alignment process. The user provides the two structures to align and a list of domains, where each domain is a list of two numeric vectors containing the residues in the first protein's domain and the second protein's domain. Selecting these domains is a difficult task specific to the user's proteins and analysis, so `PDBCleanup` does not offer any function to select domains. For these proteins, the start and end of domains were selected by manually analyzing the structure for the residues at the start and end of secondary structure elements.
+
+``` r
+# Define the domains. Here, they are the same because we use alternate
+# structures from one species rather than structures from different species
+domains6ofs <- list(list(36:486, 36:486), list(511:930, 511:930))
+alignedPredicted6ofs <- PDBCleanup::alignDomains(experimental6ofs,
+                                                 predicted6ofs,
+                                                 domains6ofs)
+# PDBCleanup::viewStructure(alignedPredicted6ofs)
+```
+
+The visualization shows that all regions not included in a domain are not moved.
+
+## References
+
+```{r}
+sessionInfo()
+```

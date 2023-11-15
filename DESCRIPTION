@@ -20,5 +20,8 @@ Imports:
     ggplot2 (>= 3.4.3),
     r3dmol (>= 0.1.2)
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr
