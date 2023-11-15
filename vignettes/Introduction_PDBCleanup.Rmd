@@ -120,6 +120,20 @@ The visualization shows that all regions not included in a domain are not moved.
 
 ## References
 
+Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.
+
+Grinter R, Leung PM, Wijeyewickrema LC, Littler D, Beckham S, Pike RN, et al. (2019) Protease-associated import systems are widespread in Gram-negative bacteria. PLoS Genet 15(10): e1008435. https://doi.org/10.1371/journal.pgen.1008435
+
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+
+Jumper, J., Evans, R., Pritzel, A. et al. Highly accurate protein structure prediction with AlphaFold. Nature 596, 583--589 (2021). <https://doi.org/10.1038/s41586-021-03819-2>
+
+Varadi M., Anyango S., Deshpande M., et al. AlphaFold Protein Structure Database: massively expanding the structural coverage of protein-sequence space with high-accuracy models. Nucleic Acids Research, Volume 50, Issue D1, 7 January 2022, Pages D439–D444. <https://doi-org.myaccess.library.utoronto.ca/10.1093/nar/gkab1061>
+
+Su W, Johnston B (2021). r3dmol: Create Interactive 3D Visualizations of Molecular Data. R package version 0.1.2, <https://CRAN.R-project.org/package=r3dmol>.
+
+Zhoutong Sun, Qian Liu, Ge Qu, Yan Feng, and Manfred T. Reetz. Utility of B-Factors in Protein Science: Interpreting Rigidity, Flexibility, and Internal Motion and Engineering Thermostability. Chemical Reviews 2019 119 (3), 1626-1665. <https://doi.org/10.1021/acs.chemrev.8b00290>
+
 ```{r}
 sessionInfo()
 ```
