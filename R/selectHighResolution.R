@@ -65,11 +65,15 @@ selectHighResolution <- function(structure,
   if (!("pdb" %in% class(structure))) {
     stop("Provided structure must be a pdb object from bio3d")
   }
+  # Check threshold
+  if (!is.na(threshold) && threshold <= 0) {
+    warning("Provided threshold is negative")
+  }
 
   atoms <- structure$atom
   if (predicted) { # Predicted structure, select high B-factor
     if (is.na(threshold)) { # Default threshold is 70
-      threshold = 70
+      threshold <- 70
     } else {
       ;
     }
@@ -78,7 +82,7 @@ selectHighResolution <- function(structure,
     highResolutionIndices <- unique(atoms[atoms$"b" >= threshold, "resno"])
   } else { # Not predicted structure, select low B-factor
     if (is.na(threshold)) { # Default threshold is 100
-      threshold = 100
+      threshold <- 100
     } else {
       ;
     }

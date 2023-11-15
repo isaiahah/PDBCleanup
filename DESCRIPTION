@@ -19,3 +19,6 @@ Imports:
     bio3d (>= 2.4-4),
     ggplot2 (>= 3.4.3),
     r3dmol (>= 0.1.2)
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
