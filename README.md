@@ -36,7 +36,7 @@ You can install the development version of PDBCleanup from
 ``` r
 # install.packages("devtools")
 library("devtools")
-devtools::install_github("isaiahah/PDBCleanup", buildVignettes = TRUE)
+devtools::install_github("isaiahah/PDBCleanup", build_vignettes = TRUE)
 library("PDBCleanup")
 ```
 
