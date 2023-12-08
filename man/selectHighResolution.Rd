@@ -2,53 +2,64 @@
 % Please edit documentation in R/selectHighResolution.R
 \name{selectHighResolution}
 \alias{selectHighResolution}
-\title{Select High Resolution Regions of a Protein Structure}
+\title{Select high resolution regions of a protein structure.}
 \usage{
 selectHighResolution(structure, predicted, threshold = NA)
 }
 \arguments{
-\item{structure}{A protein structure of class "pdb" (bio3d format) to extract
-high resolution regions from.}
+\item{structure}{A bio3d pdb protein structure which the function will
+select the specified residues from.}
 
-\item{predicted}{A boolean indicating whether the provided structure is a
-predicted structure. If TRUE, select regions with high B-factor as
-high resolution. If FALSE, select regions with low B-factor as high
-resolution.
-Defaults to TRUE.}
+\item{predicted}{A logical value indicating if the structure is predicted or
+experimental. Predicted structures are interpreted using B-factor (lower
+B-factor is high resolution) and experimental structures are interpreted
+using pLDDT (higher pLDDT is high resolution).}
 
-\item{threshold}{An optional parameter specifying the threshold
-value to identify high resolution regions. If predicted is TRUE, defaults
-to 70 per AlphaFold guidelines. If predicted is FALSE, defaults to
-60, which corresponds to 1.5 A mean deviation.}
+\item{threshold}{An optional numeric value specifying the threshold for high
+resolution regions. In predicted structures, the default is 70 and all
+residues with higher pLDDT are high resolution. In experimental
+structures, the default is 100 (~2.75 A uncertainty) and all residues
+with lower B-factor are marked high resolution.}
 }
 \value{
-A protein structure of class "pdb" containing only high resolution
-regions which satisfy the specified B-factor requirement.
+A bio3d pdb protein structure containing only high-quality residues
+satisfying the specified threshold.
 }
 \description{
 A function to select high resolution regions in a protein structure.
-High resolution regions are selected using B-factor.
-The user provides whether the structure is an AlphaFold predicted structure,
-meaning high B-factor indicates high resolution, or an experimental
-structure, meaning low B-factor indicates high resolution. They can
-optionally provide a threshold value, otherwise the function uses a default
-threshold.
+}
+\details{
+In an experimental structure, these regions are determined using the
+B-factor, which measures the average uncertainty in atom location using the
+formula B = 4*pi^2 u^2 / 3 where u is the uncertainty in angstroms. A low
+B-factor indicates a higher quality region, and the function selects all
+residues containing atoms with a B-factor below a threshold.
+
+In a predicted structure, these regions are determined using the pLDDT
+stored in the B-factor column, which is AlphaFold's prediction for that
+residue's score on the local distance difference test. A high pLDDT
+indicates the predicted residue is likely close to the true position, while
+a low pLDDT incidates less confidence in the predicted residue location.
+The function selects all residues with pLDDT above a threshold.
 }
 \examples{
 # library(bio3d)
-# Select high quality regions in an AlphaFold prediction.
+# Open the predicted structure 6ofs_predicted.pdb provided by the package.
+# This is the predicted structure of an E coli zinc protease.
 predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
-                                 package = "PDBCleanup")
+                                    package = "PDBCleanup")
 predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
-# Use default threshold of >= 70 for predicted structures
+# Use default threshold of pLDDT >= 70
 predicted6ofsHighRes <- selectHighResolution(structure = predicted6ofs,
                                              predicted = TRUE)
 
-# Select high quality regions in an experimental prediction.
+# Open the experimental structure 6ofs_experimental.pdb provided by the
+# package. This is the experimentally determined structure of the same E coli
+# zinc protease.
 experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
                                     package = "PDBCleanup")
 experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
-# Use custom threshold of <= 80, or < 1.75 A mean deviation
+# Use custom threshold of bfactor <= 80, or under ~2.5 A mean deviation
 experimental6ofsHighRes <- selectHighResolution(structure = experimental6ofs,
                                                 predicted = FALSE,
                                                 threshold = 80)
@@ -56,11 +67,6 @@ experimental6ofsHighRes <- selectHighResolution(structure = experimental6ofs,
 }
 \references{
 Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.
-
-Jumper, J., Evans, R., Pritzel, A. et al.
-Highly accurate protein structure prediction with AlphaFold.
-Nature 596, 583–589 (2021).
-https://doi.org/10.1038/s41586-021-03819-2
 
 Zhoutong Sun, Qian Liu, Ge Qu, Yan Feng, and Manfred T. Reetz.
 Utility of B-Factors in Protein Science: Interpreting Rigidity,

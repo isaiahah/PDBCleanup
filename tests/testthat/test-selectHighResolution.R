@@ -16,6 +16,7 @@ test_that("Test on predicted structure with default threshold", {
   expect_s3_class(highResolution, "pdb")
   expect_equal(highResolution$seqres, predicted6ofs$seqres)
   expect_equal(3 * nrow(highResolution$atom), length(highResolution$xyz))
+  # Predicted structures have no HETATOM, so do not need to filter to ATOM
   expect_equal(nrow(highResolution$atom),
                sum(predicted6ofs$atom$"b" >= 70))
   expect_equal(all(highResolution$atom$"b" >= 70), TRUE)
@@ -33,6 +34,7 @@ test_that("Test on predicted structure with custom threshold", {
   expect_s3_class(highResolution, "pdb")
   expect_equal(highResolution$seqres, predicted6ofs$seqres)
   expect_equal(3 * nrow(highResolution$atom), length(highResolution$xyz))
+  # Predicted structures have no HETATOM, so do not need to filter to ATOM
   expect_equal(nrow(highResolution$atom),
                sum(predicted6ofs$atom$"b" >= threshold))
   expect_equal(all(highResolution$atom$"b" >= threshold), TRUE)
@@ -50,7 +52,8 @@ test_that("Test on experimental structure with default threshold", {
   expect_s3_class(highResolution, "pdb")
   expect_equal(highResolution$seqres, experimental6ofs$seqres)
   expect_equal(3 * nrow(highResolution$atom), length(highResolution$xyz))
-  belowThreshold <- (experimental6ofs$atom$"b" <= 100)
+  belowThreshold <- ((experimental6ofs$atom$"b" <= 100) &
+                     (experimental6ofs$atom$"type" == "ATOM"))
   expect_equal(unique(highResolution$atom$resno),
                unique(experimental6ofs$atom[belowThreshold, "resno"]))
 })
@@ -69,7 +72,8 @@ test_that("Test on experimental structure with custom threshold", {
   expect_s3_class(highResolution, "pdb")
   expect_equal(highResolution$seqres, experimental6ofs$seqres)
   expect_equal(3 * nrow(highResolution$atom), length(highResolution$xyz))
-  belowThreshold <- (experimental6ofs$atom$"b" <= threshold)
+  belowThreshold <- ((experimental6ofs$atom$"b" <= threshold) &
+                     (experimental6ofs$atom$"type" == "ATOM"))
   expect_equal(unique(highResolution$atom$resno),
                unique(experimental6ofs$atom[belowThreshold, "resno"]))
 })
