@@ -54,9 +54,17 @@ experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
 Before continuing in analysis, it is helpful to visualize the structures in 3D. `PDBCleanup` offers the `viewStructure` function to visualize loaded structures:
 
 ```{r}
-PDBCleanup::viewStructure(predicted6ofs)
-PDBCleanup::viewStructure(experimental6ofs)
+# viewStructure calls render into interactive 3D models in the web browser,
+# which are extremely intensive memory-wise.
+# They are commented out here and replaced by static images of the 3D model.
+# PDBCleanup::viewStructure(predicted6ofs)
 ```
+![Predicted structure for 6ofs](../inst/extdata/6ofs_predicted.png)
+
+```{r}
+# PDBCleanup::viewStructure(experimental6ofs)
+```
+![Experimental structure for 6ofs](../inst/extdata/6ofs_experimental.png)
 
 ### Step 3: Selecting High Quality Regions
 
@@ -82,19 +90,19 @@ experimental6ofsHighRes <- PDBCleanup::selectHighResolution(
 The high-quality structures created from this function can be visualized to see which regions have been removed.
 
 ```{r}
-PDBCleanup::viewStructure(predicted6ofsHighRes)
-PDBCleanup::viewStructure(experimental6ofsHighRes)
+# PDBCleanup::viewStructure(predicted6ofsHighRes)
 ```
+![High resolution predicted structure for 6ofs](../inst/extdata/6ofs_predicted_highres.png)
 
 `PDBCleanup` also provides the `plotProteinQuality` function to represent the quality along the protein sequence in a bar plot. This provides a more sequence-oriented visualization of the high quality regions. The function accepts the protein structure, whether the protein structure is predicted or experimental (to label the y-axis), and a title for the plot.
 
 ```{r}
 PDBCleanup::plotProteinQuality(predicted6ofs,
-                               title = "Quality of Predicted 6ofs structure",
-                               predicted = TRUE)
+                               title = "Predicted Quality",
+                               ytitle = "pLDDT")
 PDBCleanup::plotProteinQuality(experimental6ofs,
-                               title = "Quality of Experimental 6ofs structure",
-                               predicted = FALSE)
+                               title = "Experimental Quality",
+                               ytitle = "B-factor")
 ```
 
 ### Step 4: Domain Alignment
@@ -110,8 +118,9 @@ domains6ofs <- list(list(36:486, 36:486), list(511:930, 511:930))
 alignedPredicted6ofs <- PDBCleanup::alignDomains(experimental6ofs,
                                                  predicted6ofs,
                                                  domains6ofs)
-PDBCleanup::viewStructure(alignedPredicted6ofs)
+# PDBCleanup::viewStructure(alignedPredicted6ofs)
 ```
+![Rigid domain alignment of predicted 6ofs with experimental 6ofs](../inst/extdata/rigid_align.png)
 
 The visualization shows that all regions not included in a domain are not moved.
 

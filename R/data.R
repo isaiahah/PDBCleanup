@@ -4,7 +4,8 @@
 #' a probable zinc protease. The protein has Uniprot ID P31828.
 #' This experimental structure was uploaded to the PDB under ID 6ofs as part
 #' of the publication "Protase-associated import systems are widespread in
-#' Gram-negative bacteria" by Grinter R et al (2019).
+#' Gram-negative bacteria" by Grinter R et al (2019). This file has been
+#' modified to remove HETATM and ANISOU lines from the file to reduce size.
 #'
 #' @format PDB file
 #'
