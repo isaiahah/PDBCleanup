@@ -76,13 +76,24 @@ alignDomains <- function(fixed, mobile, domains) {
     mobileDomainRows <- which(mobileInDomain)
 
     # Extract the xyz coordinates of atoms in the domain
+    fixedDomainAtom <- fixed$atom[fixedInDomain, ]
     fixedDomainxyz <- as.matrix(fixed$atom[fixedInDomain, c("x", "y", "z")])
     fixedDomainxyz <- matrix(t(fixedDomainxyz), nrow = 1) # Reshape
     mobileDomainxyz <- as.matrix(mobile$atom[mobileInDomain, c("x", "y", "z")])
     mobileDomainxyz <- matrix(t(mobileDomainxyz), nrow = 1) # Reshape
 
+    # Fit along alpha carbons by finding CA atom indices then converting to
+    # xyz indices (atom i corresponds to xyz indices 3i-2, 3i-1, and 3i)
+    fixedDomainCA <- which(fixed$atom[fixedInDomain, "elety"] == "CA")
+    fixedDomainFit <- c(3 * fixedDomainCA - 2, 3 * fixedDomainCA - 1,
+                        3 * fixedDomainCA)
+    mobileDomainCA <- which(mobile$atom[mobileInDomain, "elety"] == "CA")
+    mobileDomainFit <- c(3 * mobileDomainCA - 2, 3 * mobileDomainCA - 1,
+                        3 * mobileDomainCA)
+
     # Align domains
-    alignedDomainxyz <- bio3d::fit.xyz(fixedDomainxyz, mobileDomainxyz)
+    alignedDomainxyz <- bio3d::fit.xyz(fixedDomainxyz, mobileDomainxyz,
+                                       fixedDomainFit, mobileDomainFit)
 
     # Save the aligned domain in atoms and xyz attributes
     for (i in seq_along(mobileDomainRows)) {
