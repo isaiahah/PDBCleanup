@@ -4,36 +4,42 @@
 \alias{plotProteinQuality}
 \title{Plot the quality of a protein structure along its sequence.}
 \usage{
-plotProteinQuality(structure, title, predicted)
+plotProteinQuality(
+  structure,
+  title,
+  xtitle = "Sequence Position",
+  ytitle = "Predicted Sequence Quality"
+)
 }
 \arguments{
-\item{structure}{A protein structure of class "pdb" (from bio3d) to
-visualize B-values from.}
+\item{structure}{A bio3d pdb protein structure to plot quality values from.}
 
-\item{title}{The title for the generated plot.}
+\item{title}{A character string containing the title for the generated plot.}
 
-\item{predicted}{Whether the protein structure is predicted, so the y axis
-label is "Predicted Structure Quality," or experimental, so the y axis
-label is "Experimental B-factor."}
+\item{xtitle}{An optional character string containing the x-axis title.
+Default value is "Sequence Position"}
+
+\item{ytitle}{An optional character string containing the y-axis title.
+Default value is "Predicted Structure Quality"}
 }
 \value{
 The histogram plot of the B-factor along the protein sequence.
 }
 \description{
-A function to visualize the B-factor of a protein structure as a bar plot
-along the sequence. The user specifies whether the structure is predicted
-to specify the y-axis label and gives a custom plot title.
+A function to visualize the data in the B-factor column of a protein
+structure as a bar plot along the sequence. The user specifies the plot title
+and optionally the x-axsis and y-axis title.
 }
 \examples{
 # library(bio3d)
 # library(ggplot2)
-# Load and visualize the quality along an AlphaFold prediction.
+# Open the predicted structure 6ofs_predicted.pdb provided by the package.
+# This is the predicted structure of an E coli zinc protease.
 predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
                                  package = "PDBCleanup")
 predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
 plotProteinQuality(predicted6ofs,
-                   title = "Quality of Predicted 6ofs structure",
-                   predicted = TRUE)
+                   title = "Quality of Predicted 6ofs structure")
 }
 \references{
 H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag

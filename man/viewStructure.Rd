@@ -4,11 +4,13 @@
 \alias{viewStructure}
 \title{Visualize the 3D structure of a protein.}
 \usage{
-viewStructure(structure)
+viewStructure(structure, color = "#00cccc")
 }
 \arguments{
-\item{structure}{A protein structure of class "pdb" (from bio3d) to
-visualize as a 3D model.}
+\item{structure}{A bio3d pdb protein structure to visualize as a 3D model.}
+
+\item{color}{An optional character string specifying the color for the 3D
+model. Default value is "#00cccc".}
 }
 \value{
 The interactive viewer showing the 3D structure model. Shown in the

@@ -74,7 +74,7 @@ selectResno <- function(structure, resno) {
 #' The function selects all residues with pLDDT above a threshold.
 #'
 #' @param structure A bio3d pdb protein structure which the function will
-#'     select the specified residues from.
+#'     select the high quality residues from.
 #' @param predicted A logical value indicating if the structure is predicted or
 #'     experimental. Predicted structures are interpreted using B-factor (lower
 #'     B-factor is high resolution) and experimental structures are interpreted
@@ -174,6 +174,108 @@ selectHighResolution <- function(structure, predicted, threshold = NA) {
   # Select high resolution structure from selected residue positions
   highResStructure <- selectResno(structure, highResolutionResno)
   return(highResStructure)
+}
+
+
+#' Select ordered regions of a protein structure.
+#'
+#' A function to select all intrinsically ordered residues of a protein
+#' structure and remove all intrinsically disordered residues. Residues are
+#' classified using the FoldIndex score (implemented in the idpr package rather
+#' than re-implementing), which predicts disorder at each residue with the
+#' formula D = 2.785 H - | R | - 1.151 where H is the scaled mean hydropathy
+#' and R is the scaled mean charge within a sequence window around the residue.
+#' It ranges from -1 to 1 where positive scores indicate ordered residues while
+#' negative scores indicate disordered residues.
+#' The user optionally provides a threshold (default 0) to denote order and
+#' optionally provides a windowSize (default 21) for this calculation.
+#'
+#' The first and last windowSize // 2 residues are removed, as they lack a
+#' sufficient window size to calculate FoldIndex score.
+#'
+#' @param structure A bio3d pdb protein structure which the function will
+#'     select the ordered residues from.
+#' @param threshold An optional numerical value specifying the threshold for
+#'     ordered regions. Defaults to scores greater than 0 denoting order.
+#' @param windowSize An optional odd integer value specifying the window size
+#'     used when calculating disorder score. Defaults to 21.
+#'
+#' @return A bio3d pdb protein structure containing only ordered residues with
+#'     disorder scores satisfying the specified threshold.
+#'
+#' @references
+#' Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.
+#'
+#' McFadden, W. M., and Yanowitz, J. L. (2022). idpr: A package for
+#' profiling and analyzing Intrinsically Disordered Proteins in R.
+#' PLOS ONE, 17(4), e0266929. doi:10.1371/journal.pone.0266929.
+#'
+#' Prilusky, J., Felder, C. E., et al. (2005). FoldIndex: a simple tool to
+#' predict whether a given protein sequence is intrinsically unfolded.
+#' Bioinformatics, 21(16), 3435-3438.
+#'
+#' @examples
+#' # Open the experimental structure 6ofs_experimental.pdb provided by the
+#' # package. This is the experimentally determined structure of an E coli
+#' # zinc protease.
+#' experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
+#'                                     package = "PDBCleanup")
+#' experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
+#' # Use custom threshold 0.1 and window size 51
+#' experimental6ofsOrdered <- selectOrdered(experimental6ofs,
+#'                                          threshold = 0.1,
+#'                                          windowSize = 51)
+#'
+#' @importFrom idpr foldIndexR
+#' @export
+selectOrdered <- function(structure, threshold = 0, windowSize = 21) {
+  # Check type of structure argument
+  if (!(inherits(structure, "pdb"))) {
+    stop("Provided structure must be a pdb object from bio3d")
+  } else {
+    ; # Valid type
+  }
+
+  # Check type of threshold argument
+  if (!(is.numeric(threshold)) || (length(threshold) != 1)) {
+    stop("threshold must be a single numeric value")
+  } else {
+    ; # Valid type and length
+  }
+
+  # Check type of windowSize argument
+  if (!(is.numeric(windowSize)) || (length(windowSize) != 1)) {
+    stop("windowSize must be a single numeric value")
+  } else {
+    ; # Valid type and length
+  }
+  # Check windowSize is odd
+  if (windowSize %% 2 != 1) {
+    stop("windowSize must be odd")
+  } else {
+    ; # windowSize is odd
+  }
+
+  # Convert sequence stored in structure from 3 letter codes to 1 letter codes
+  AAcode3to1 <- c("ALA" = "A", "ARG" = "R", "ASN" = "N", "ASP" = "D",
+                 "CYS" = "C", "GLU" = "E", "GLN" = "Q", "GLY" = "G",
+                 "HIS" = "H", "ILE" = "I", "LEU" = "L", "LYS" = "K",
+                 "MET" = "M", "PHE" = "F", "PRO" = "P", "SER" = "S",
+                 "THR" = "T", "TRP" = "W", "TYR" = "Y", "VAL" = "V")
+  sequence <- rep("", length(structure$seqres))
+  for (i in seq_along(structure$seqres)) {
+    sequence[i] <- AAcode3to1[structure$seqres[i]]
+  }
+
+  # Compute disorder scores and select ordered regions
+  disorderScores <- idpr::foldIndexR(sequence, window = windowSize,
+                                     plotResults = FALSE)
+  orderedResno <- disorderScores[disorderScores$foldIndex > threshold,
+                                 "Position"]
+
+  # Select the ordered structure from the ordered residue positions
+  orderedStructure <- selectResno(structure, orderedResno)
+  return(orderedStructure)
 }
 
 # [END]

@@ -1,15 +1,15 @@
 #' Plot the quality of a protein structure along its sequence.
 #'
-#' A function to visualize the B-factor of a protein structure as a bar plot
-#' along the sequence. The user specifies whether the structure is predicted
-#' to specify the y-axis label and gives a custom plot title.
+#' A function to visualize the data in the B-factor column of a protein
+#' structure as a bar plot along the sequence. The user specifies the plot title
+#' and optionally the x-axsis and y-axis title.
 #'
-#' @param structure A protein structure of class "pdb" (from bio3d) to
-#'    visualize B-values from.
-#' @param title The title for the generated plot.
-#' @param predicted Whether the protein structure is predicted, so the y axis
-#'    label is "Predicted Structure Quality," or experimental, so the y axis
-#'    label is "Experimental B-factor."
+#' @param structure A bio3d pdb protein structure to plot quality values from.
+#' @param title A character string containing the title for the generated plot.
+#' @param xtitle An optional character string containing the x-axis title.
+#'    Default value is "Sequence Position"
+#' @param ytitle An optional character string containing the y-axis title.
+#'    Default value is "Predicted Structure Quality"
 #'
 #' @returns The histogram plot of the B-factor along the protein sequence.
 #'
@@ -20,32 +20,51 @@
 #' @examples
 #' # library(bio3d)
 #' # library(ggplot2)
-#' # Load and visualize the quality along an AlphaFold prediction.
+#' # Open the predicted structure 6ofs_predicted.pdb provided by the package.
+#' # This is the predicted structure of an E coli zinc protease.
 #' predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
 #'                                  package = "PDBCleanup")
 #' predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
 #' plotProteinQuality(predicted6ofs,
-#'                    title = "Quality of Predicted 6ofs structure",
-#'                    predicted = TRUE)
+#'                    title = "Quality of Predicted 6ofs structure")
 #' @export
 #' @import ggplot2
-plotProteinQuality <- function(structure, title, predicted) {
-  # Check structure argument
-  if (!("pdb" %in% class(structure))) {
+plotProteinQuality <- function(structure, title,
+                               xtitle = "Sequence Position",
+                               ytitle = "Predicted Sequence Quality") {
+  # Check type of structure argument
+  if (!(inherits(structure, "pdb"))) {
     stop("Provided structure must be a pdb object from bio3d")
+  } else {
+    ; # Valid type
   }
 
-  if (predicted) {
-    ytitle <- "Predicted Structure Quality"
+  # Check type of title
+  if (!(is.character(title)) || (length(title) != 1)) {
+    stop("Provided title must be a character string with one item")
   } else {
-    ytitle <- "Experimental B-factor"
+    ; # Valid type and length
+  }
+
+  # Check type of xtitle
+  if (!(is.character(xtitle)) || (length(xtitle) != 1)) {
+    stop("Provided xtitle must be a character string with one item")
+  } else {
+    ; # Valid type and length
+  }
+
+  # Check type of ytitle
+  if (!(is.character(ytitle)) || (length(ytitle) != 1)) {
+    stop("Provided ytitle must be a character string with one item")
+  } else {
+    ; # Valid type and length
   }
 
   proteinQuality <- unique(structure$atom[ , c("resno", "b")])
   proteinQualityPlot <- ggplot2::ggplot(data = proteinQuality) +
     ggplot2::aes(x = resno, y = b) +
     ggplot2::geom_col() +
-    ggplot2::labs(title = title, x = "Sequence Position", y = ytitle) +
+    ggplot2::labs(title = title, x = xtitle, y = ytitle) +
     ggplot2::theme_minimal()
   return(proteinQualityPlot)
 }

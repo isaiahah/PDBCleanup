@@ -6,7 +6,7 @@ Authors@R: person("Isaiah", "Hazelwood",
                   email="isaiah.hazelwood@mail.utoronto.ca", 
                   role=c("aut", "cre"))
 Maintainer: Isaiah Hazelwood <isaiah.hazelwood@mail.utoronto.ca>
-Description: PDBCleanup is an R package to preprocess PDB protein structure files for later analysis. Its features include selecting high resolution regions from PDB files and superimposing individual regions against corresponding regions of another reference protein structure to improve relative domain positions. It further allows visualization of a quality score along an input protein's sequence, visualization of the 3D protein structure produced after selecting high quality regions and performing superimposition, and visualization of the structural difference between a pair of protein structures.
+Description: PDBCleanup is an R package to preprocess PDB protein structure files for later analysis. Its features include selecting well-predicted subsections from structures, aligning individual domains, and visualizing structure prediction quality.
     PDBCleanup functions are highly customizable according to user through optional arguments, to ensure the method for preprocessing the protein structure matches what the user requires for their analysis.
     While PDBCleanup is oriented primarily for improvement of predicted protein structures produced by AlphaFold2, it is applicable to any protein structure and can be similarly applied to structures obtained from experiments or other computational prediction methods.
 License: GPL + file LICENSE
@@ -15,9 +15,11 @@ LazyData: true
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Depends: R (>= 3.1.0)
+biocViews:
 Imports: 
     bio3d (>= 2.4-4),
     ggplot2 (>= 3.4.3),
+    idpr,
     r3dmol (>= 0.1.2)
 Suggests: 
     knitr,
