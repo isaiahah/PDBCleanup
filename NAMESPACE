@@ -2,6 +2,7 @@
 
 export(alignDomains)
 export(plotProteinQuality)
+export(runShiny)
 export(selectHighResolution)
 export(selectOrdered)
 export(selectResno)
@@ -12,3 +13,4 @@ import(r3dmol)
 importFrom(bio3d,atom.select)
 importFrom(bio3d,trim)
 importFrom(idpr,foldIndexR)
+importFrom(shiny,runApp)

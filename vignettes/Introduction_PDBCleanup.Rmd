@@ -66,9 +66,9 @@ Before continuing in analysis, it is helpful to visualize the structures in 3D. 
 ```
 ![Experimental structure for 6ofs](../inst/extdata/6ofs_experimental.png)
 
-### Step 3: Selecting High Quality Regions
+### Step 3: Selecting Structure Subsets
 
-One possible structure preparation step is creating structures with the only high-quality regions from the structure. This is most applicable for AlphaFold structures, as a region with pLDDT \< 70 is unreliable, but can also be applied to experimental structures to select regions with low B-factor corresponding to low variation in residue position.
+One possible structure preparation step is creating structures with the only high-quality regions from the structure. This is most applicable for AlphaFold structures, as a region with pLDDT \< 70 is unreliable, but can also be applied to experimental structures to select regions with low B-factor corresponding to low uncertainty in residue position.
 
 `PDBCleanup` offers the `selectHighResolution` function for this purpose. It requires the protein structure, whether the protein structure is predicted or experimental (to interpret the B-factor column), and a threshold to define high-quality regions.
 
@@ -92,7 +92,23 @@ The high-quality structures created from this function can be visualized to see 
 ```{r}
 # PDBCleanup::viewStructure(predicted6ofsHighRes)
 ```
-![High resolution predicted structure for 6ofs](../inst/extdata/6ofs_predicted_highres.png)
+![High quality subset of 6ofs predicted structure](../inst/extdata/6ofs_predicted_highres.png)
+
+Another possible structure preparation step is removing all intrinsically disordered regions from the protein structure, as their experimental or predicted structures are brief conformations and not stable. `PDBCleanup` offers the `selectOrdered` function for this purpose. It uses the FoldIndex score to predict disordered regions. The user can optionally specify the window used to calculate this score and a threshold to select ordered scores.
+
+```{r}
+# Apply custom threshold and window size
+experimental6ofsOrdered <- PDBCleanup::selectOrdered(
+  structure = experimental6ofs,
+  threshold = 0,
+  windowSize = 21
+)
+```
+
+```{r}
+# viewStructure(experimental6ofsOrdered)
+```
+![Ordered subset of experimental 6ofs structure for 6ofs](../inst/extdata/6ofs_predicted_highres.png)
 
 `PDBCleanup` also provides the `plotProteinQuality` function to represent the quality along the protein sequence in a bar plot. This provides a more sequence-oriented visualization of the high quality regions. The function accepts the protein structure, whether the protein structure is predicted or experimental (to label the y-axis), and a title for the plot.
 

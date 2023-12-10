@@ -1,0 +1,12 @@
+citHeader("To cite PDBCleanup in publications use:")
+
+citEntry(entry = "Unpublished",
+  title        = "PDBCleanup: Preprocessing Protein Structures",
+  author       = "Isaiah Hazelwood",
+  note         = "Unpublished",
+  year         = "2023",
+
+  textVersion  =
+  paste("Hazelwood, I.A. (2022) PDBCleanup: Preprocessing Protein Structures.
+        Unpublished. URL https://github.com/isaiahah/PDBCleanup.")
+)

@@ -9,7 +9,7 @@
 #'
 #' @format PDB file
 #'
-#' @source https://www.ebi.ac.uk/pdbe/entry/pdb/6OFS
+#' @source https://www.rcsb.org/structure/6OFS
 #'
 #' @references
 #' Grinter R, Leung PM, Wijeyewickrema LC, Littler D, Beckham S, Pike RN, et al.
@@ -33,7 +33,7 @@
 #'     AlphaFold Protein Structure Database: massively expanding the structural
 #'     coverage of protein-sequence space with high-accuracy models.
 #'     Nucleic Acids Research, Volume 50, Issue D1, 7 January 2022, Pages D439–D444.
-#'     https://doi-org.myaccess.library.utoronto.ca/10.1093/nar/gkab1061
+#'     https://doi.org/10.1093/nar/gkab1061
 #'
 
 # [END]

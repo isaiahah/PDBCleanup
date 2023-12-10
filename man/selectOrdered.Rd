@@ -36,3 +36,27 @@ optionally provides a windowSize (default 21) for this calculation.
 The first and last windowSize // 2 residues are removed, as they lack a
 sufficient window size to calculate FoldIndex score.
 }
+\examples{
+# Open the experimental structure 6ofs_experimental.pdb provided by the
+# package. This is the experimentally determined structure of an E coli
+# zinc protease.
+experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
+                                    package = "PDBCleanup")
+experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
+# Use custom threshold 0.1 and window size 51
+experimental6ofsOrdered <- selectOrdered(experimental6ofs,
+                                         threshold = 0.1,
+                                         windowSize = 51)
+
+}
+\references{
+Grant, B.J. et al. (2006) Bioinformatics 22, 2695--2696.
+
+McFadden, W. M., and Yanowitz, J. L. (2022). idpr: A package for
+profiling and analyzing Intrinsically Disordered Proteins in R.
+PLOS ONE, 17(4), e0266929. doi:10.1371/journal.pone.0266929.
+
+Prilusky, J., Felder, C. E., et al. (2005). FoldIndex: a simple tool to
+predict whether a given protein sequence is intrinsically unfolded.
+Bioinformatics, 21(16), 3435-3438.
+}
