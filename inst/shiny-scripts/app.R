@@ -3,6 +3,7 @@
 # Unpublished. URL https://github.com/anjalisilva/TestingPackage.
 
 library(shiny)
+library(shinyalert)
 library(bio3d)
 
 # Define UI
@@ -27,6 +28,9 @@ ui <- fluidPage(
              The output structure will be shown on the main panel and available
              for download as a PDB file."),
       br(),
+      shinyalert::useShinyalert(force = TRUE),
+      uiOutput("PDBdata1"),
+      actionButton(inputId = "PDBDataDetails1", label = "Demo Dataset Details"),
       fileInput(inputId = "PDB1",
                 label = "Provide a protein structure for analysis. File should be a PDB.",
                 accept = ".pdb"),
@@ -60,6 +64,8 @@ ui <- fluidPage(
                     ),
                   tabPanel(
                     "Align Domains",
+                    uiOutput("PDBdata2"),
+                    actionButton(inputId = "PDBDataDetails2", label = "Demo Dataset Details"),
                     fileInput(inputId = "PDB2",
                               label = "Provide a reference protein structure to align against. File should be a PDB.",
                               accept = ".pdb"),
@@ -159,7 +165,7 @@ server <- function(input, output) {
     }
   })
 
-  # Define outputs
+  # Define outputs: structure model, downloadable PDB, and quality plot
   output$model <- renderR3dmol({
     if (!is.null(functionOutputs$structure)) {
       PDBCleanup::viewStructure(functionOutputs$structure)
@@ -179,6 +185,32 @@ server <- function(input, output) {
                                      "Protein Quality Plot")
     }
   )
+
+  # Define PDB data download elements
+  PDBurl1 <- a("Predicted 6ofs PDB",
+               href="https://alphafold.ebi.ac.uk/files/AF-P31828-F1-model_v4.pdb")
+  output$PDBdata1 <- renderUI({
+    tagList("Download Demo Protein Structure:", PDBurl1)
+  })
+  PDBurl2 <- a("Experimental 6ofs PDB",
+               href="https://files.rcsb.org/download/6OFS.pdb")
+  output$PDBdata2 <- renderUI({
+    tagList("Download Demo Protein Structure:", PDBurl2)
+  })
+
+  # Define popup with PDB data information
+  observeEvent(input$PDBDataDetails1, {
+    shinyalert(title = "Predicted Protein Structure",
+               text = "A computationally predicted structure of E coli protein Pqql, a probable zinc protease. It was predicted by AlphaFold2 based on the protein sequence for UniProt entry P31828.
+               Citation: Varadi M., Anyango S., Deshpande M., et al. AlphaFold Protein Structure Database: massively expanding the structural coverage of protein-sequence space with high-accuracy models. Nucleic Acids Research, Volume 50, Issue D1, 7 January 2022, Pages D439–D444. https://doi.org/10.1093/nar/gkab1061",
+               type = "info")
+  })
+  observeEvent(input$PDBDataDetails2, {
+    shinyalert(title = "Experimental Protein Structure",
+               text = "An experimental structure of E coli protein Pqql, a probable zinc protease. The protein has Uniprot ID P31828 and was uploaded to the PDB under ID 60fs.
+               Citation: Grinter R, Leung PM, Wijeyewickrema LC, Littler D, Beckham S, Pike RN, et al. (2019) Protease-associated import systems are widespread in Gram-negative bacteria. PLoS Genet 15(10): e1008435. https://doi.org/10.1371/journal.pgen.1008435",
+               type = "info")
+  })
 }
 
 
