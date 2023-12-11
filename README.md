@@ -172,6 +172,9 @@ Prilusky, J., Felder, C. E., et al. (2005). FoldIndex: a simple tool to
 predict whether a given protein sequence is intrinsically unfolded.
 *Bioinformatics*, 21(16), 3435-3438.
 
+Silva, A. (2022) TestingPackage: An Example R Package For BCB410H.
+Unpublished. URL <https://github.com/anjalisilva/TestingPackage>.
+
 Su W, Johnston B (2021). r3dmol: Create Interactive 3D Visualizations of
 Molecular Data. R package version 0.1.2,
 <https://CRAN.R-project.org/package=r3dmol>.

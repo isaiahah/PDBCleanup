@@ -100,6 +100,8 @@ McFadden, W. M., and Yanowitz, J. L. (2022). idpr: A package for profiling and a
 
 Prilusky, J., Felder, C. E., et al. (2005). FoldIndex: a simple tool to predict whether a given protein sequence is intrinsically unfolded. _Bioinformatics_, 21(16), 3435-3438.
 
+Silva, A. (2022) TestingPackage: An Example R Package For BCB410H. Unpublished. URL https://github.com/anjalisilva/TestingPackage.
+
 Su W, Johnston B (2021). r3dmol: Create Interactive 3D Visualizations of Molecular Data. R package version 0.1.2, <https://CRAN.R-project.org/package=r3dmol>.
 
 Terwilliger, T.C., Liebschner, D., Croll, T.I. et al. AlphaFold predictions are valuable hypotheses and accelerate but do not replace experimental structure determination. _Nat Methods_ (2023). <https://doi.org./10.1038/s41592-023-02087-4>
