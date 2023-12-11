@@ -28,10 +28,13 @@ Imports:
     ggplot2 (>= 3.4.3),
     idpr,
     r3dmol (>= 0.1.2),
-    shiny
+    shiny,
+    shinyalert
 Suggests: 
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://github.com/isaiahah/PDBCleanup
+BugReports: https://github.com/isaiahah/PDBCleanup/issues
