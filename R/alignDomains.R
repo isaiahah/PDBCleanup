@@ -1,8 +1,9 @@
-#' Independently align multiple domains in a protein structure.
+#' Independently align multiple structure domains rigidly.
 #'
 #' A function to align a mobile protein structure against a fixed template
 #' protein structure by independently aligning each pair of provided domains.
-#' The locations of atoms in the mobile protein structure which are not part of
+#' The alignment is rigid, eg the domain is moved as one unit. Further,
+#' the locations of atoms in the mobile protein structure which are not part of
 #' a domain do not move.
 #'
 #' @param fixed A protein structure of class "pdb" (from bio3d) to
@@ -23,11 +24,14 @@
 #'
 #' @examples
 #' # library(bio3d)
-#' # Load an AlphaFold prediction.
+#' # Open the predicted structure 6ofs_predicted.pdb provided by the package.
+#' # This is the predicted structure of an E coli zinc protease.
 #' predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
 #'                                  package = "PDBCleanup")
 #' predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
-#' # Load the experimental prediction.
+#' # Open the experimental structure 6ofs_experimental.pdb provided by the
+#' # package. This is the experimentally determined structure of the same E coli
+#' # zinc protease.
 #' experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
 #'                                  package = "PDBCleanup")
 #' experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
@@ -36,6 +40,9 @@
 #' # structures from one species rather than structures from different species
 #' domains6ofs <- list(list(36:486, 36:486), list(511:930, 511:930))
 #'
+#' # The domains are placed differently between structures. This alignment moves
+#' # the predicted domains into the places predicted by the experimental
+#' # domains, which is beneficial if the experimental domain locations is better.
 #' alignedPredicted6ofs <- alignDomains(experimental6ofs, predicted6ofs,
 #'                                      domains6ofs)
 #'
@@ -43,21 +50,31 @@
 #' @import bio3d
 alignDomains <- function(fixed, mobile, domains) {
   # Check input types
-  if (!("pdb" %in% class(fixed))) {
-    stop("Fixed structure must be a pdb object from bio3d")
+  if (!(inherits(fixed, "pdb"))) {
+    stop("fixed structure must be a pdb object from bio3d")
+  } else {
+    ; # Valid type
   }
-  if (!("pdb" %in% class(mobile))) {
-    stop("Mobile structure must be a pdb object from bio3d")
+  if (!(inherits(mobile, "pdb"))) {
+    stop("mobile structure must be a pdb object from bio3d")
+  } else {
+    ; # Valid type
   }
   if (!("list" %in% class(domains))) {
     stop("Domains should be a list: See alignDomains documentation")
+  } else {
+    ; # Valid type
   }
   if (length(domains) == 0) {
     stop("Must provide at least 1 domain to align")
+  } else {
+    ; # Valid length
   }
   for (i in seq_along(domains)) {
     if (!("list" %in% class(domains[[i]])) || length(domains[[i]]) != 2) {
       stop("All domains must be length 2 lists: See alignDomains documentation")
+    } else {
+      ; # Valid domains
     }
   }
 

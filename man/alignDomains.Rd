@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignDomains.R
 \name{alignDomains}
 \alias{alignDomains}
-\title{Independently align multiple domains in a protein structure.}
+\title{Independently align multiple structure domains rigidly.}
 \usage{
 alignDomains(fixed, mobile, domains)
 }
@@ -26,16 +26,20 @@ structure aligned to the fixed structure on each domain.
 \description{
 A function to align a mobile protein structure against a fixed template
 protein structure by independently aligning each pair of provided domains.
-The locations of atoms in the mobile protein structure which are not part of
+The alignment is rigid, eg the domain is moved as one unit. Further,
+the locations of atoms in the mobile protein structure which are not part of
 a domain do not move.
 }
 \examples{
 # library(bio3d)
-# Load an AlphaFold prediction.
+# Open the predicted structure 6ofs_predicted.pdb provided by the package.
+# This is the predicted structure of an E coli zinc protease.
 predicted6ofsFile <- system.file("extdata", "6ofs_predicted.pdb",
                                  package = "PDBCleanup")
 predicted6ofs <- bio3d::read.pdb(predicted6ofsFile)
-# Load the experimental prediction.
+# Open the experimental structure 6ofs_experimental.pdb provided by the
+# package. This is the experimentally determined structure of the same E coli
+# zinc protease.
 experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
                                  package = "PDBCleanup")
 experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
@@ -44,6 +48,9 @@ experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
 # structures from one species rather than structures from different species
 domains6ofs <- list(list(36:486, 36:486), list(511:930, 511:930))
 
+# The domains are placed differently between structures. This alignment moves
+# the predicted domains into the places predicted by the experimental
+# domains, which is beneficial if the experimental domain locations is better.
 alignedPredicted6ofs <- alignDomains(experimental6ofs, predicted6ofs,
                                      domains6ofs)
 

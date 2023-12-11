@@ -17,8 +17,8 @@
 #'
 #' @examples
 #' # library(bio3d)
-#' # Open a PDB structure. The package provides one at 6ofs_predicted.pdb, which
-#' # is the experimentally determined structure of an E coli zinc protease.
+#' # Open a PDB structure. The package provides one at 6ofs_experimental.pdb,
+#' # which is the experimentally determined structure of an E coli zinc protease.
 #' experimental6ofsFile <- system.file("extdata", "6ofs_experimental.pdb",
 #'                                     package = "PDBCleanup")
 #' experimental6ofs <- bio3d::read.pdb(experimental6ofsFile)
