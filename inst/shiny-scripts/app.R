@@ -27,6 +27,8 @@ ui <- fluidPage(
              values are shown below. Press 'Run' to perform the operation.
              The output structure will be shown on the main panel and available
              for download as a PDB file."),
+      tags$p("Note: Smooth domain alignment is not supported in Shiny due to
+             the function's long runtime."),
       br(),
       shinyalert::useShinyalert(force = TRUE),
       uiOutput("PDBdata1"),

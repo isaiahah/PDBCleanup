@@ -125,18 +125,33 @@ PDBCleanup::plotProteinQuality(experimental6ofs,
 
 Another possible structure preparation step is aligning each domain of one structure against that domain in another structure, to use the overall shape of the latter structure with the local predictions of the former structure. This is important for the zinc protease structure considered here, as the predicted and experimental structures place the domains in very different positions relative to one another.
 
-`PDBCleanup` provides the `alignDomains` function to perform this alignment process. The user provides the two structures to align and a list of domains, where each domain is a list of two numeric vectors containing the residues in the first protein's domain and the second protein's domain. Selecting these domains is a difficult task specific to the user's proteins and analysis, so `PDBCleanup` does not offer any function to select domains. For these proteins, the start and end of domains were selected by manually analyzing the structure for the residues at the start and end of secondary structure elements.
+`PDBCleanup` provides the `alignDomainsRigid` and `alignDomainsSmooth` functions to perform this alignment process. The user provides the two structures to align and a list of domains, where each domain is a list of two numeric vectors containing the residues in the first protein's domain and the second protein's domain. The first function rigidly aligns domains as units, while the second performs rigid alignment then smooths atom displacements as described in Terwilliger et al (2023).
+
+Selecting these domains is a difficult task specific to the user's proteins and analysis, so `PDBCleanup` does not offer any function to select domains. For these proteins, the start and end of domains were selected by manually analyzing the structure for the residues at the start and end of secondary structure elements.
 
 ```{r}
 # Define the domains. Here, they are the same because we use alternate
 # structures from one species rather than structures from different species
 domains6ofs <- list(list(36:486, 36:486), list(511:930, 511:930))
-alignedPredicted6ofs <- PDBCleanup::alignDomains(experimental6ofs,
-                                                 predicted6ofs,
-                                                 domains6ofs)
+alignedPredicted6ofs <- PDBCleanup::alignDomainsRigid(
+  experimental6ofs,
+  predicted6ofs,
+  domains6ofs)
 # PDBCleanup::viewStructure(alignedPredicted6ofs)
 ```
 ![Rigid domain alignment of predicted 6ofs with experimental 6ofs](../inst/extdata/rigid_align.png)
+
+```{r}
+# This function runs but is slow (~10 seconds). Commented here to
+# minimize time to assemble Vignette
+# alignedPredicted6ofs <- PDBCleanup::alignDomainsSmooth(
+#   experimental6ofs,
+#   predicted6ofs,
+#   domains6ofs)
+# PDBCleanup::viewStructure(alignedPredicted6ofs)
+```
+
+![Smooth domain alignment of predicted 6ofs with experimental 6ofs](../inst/extdata/smooth_align.png)
 
 The visualization shows that all regions not included in a domain are not moved.
 
@@ -157,6 +172,8 @@ McFadden, W. M., and Yanowitz, J. L. (2022). idpr: A package for profiling and a
 Prilusky, J., Felder, C. E., et al. (2005). FoldIndex: a simple tool to predict whether a given protein sequence is intrinsically unfolded. _Bioinformatics_, 21(16), 3435-3438.
 
 Su W, Johnston B (2021). r3dmol: Create Interactive 3D Visualizations of Molecular Data. R package version 0.1.2, <https://CRAN.R-project.org/package=r3dmol>.
+
+Terwilliger, T.C., Liebschner, D., Croll, T.I. et al. AlphaFold predictions are valuable hypotheses and accelerate but do not replace experimental structure determination. Nat Methods (2023). https://doi.org./10.1038/s41592-023-02087-4
 
 Varadi M., Anyango S., Deshpande M., et al. AlphaFold Protein Structure Database: massively expanding the structural coverage of protein-sequence space with high-accuracy models. _Nucleic Acids Research_, Volume 50, Issue D1, 7 January 2022, Pages D439–D444. <https://doi.org/10.1093/nar/gkab1061>
 

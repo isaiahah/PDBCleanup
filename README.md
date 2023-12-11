@@ -51,7 +51,7 @@ runShiny()
     data(package = "PDBCleanup")  # No R datasets are available with the package
     browseVignettes("PDBCleanup")
 
-There are 6 functions in `PDBCleanup`:
+There are 7 functions in `PDBCleanup`:
 
 1.  `selectResno`: A small function to select a provided set of residues
     from a PDB protein structure.
@@ -81,14 +81,20 @@ There are 6 functions in `PDBCleanup`:
     specifies whether the structure is predicted or experimental to
     specify the y-axis label and gives a custom plot title.
 
-5.  `alignDomains`: A function to align a mobile protein structure
-    against a fixed template protein structure by independently aligning
-    each pair of provided domains. The locations of atoms in the mobile
-    protein structure which are not part of a domain do not move. It
-    both accepts and returns protein structures compatible with `bio3d`
-    functions.
+5.  `alignDomainsRigid`: A function to align a mobile protein structure
+    against a fixed template protein structure by independently rigidly
+    aligning each pair of provided domains, with the domain as one unit.
+    The locations of atoms in the mobile protein structure which are not
+    part of a domain do not move. It both accepts and returns protein
+    structures compatible with `bio3d` functions.
 
-6.  `viewStructure`: A function to visualize the provided structure with
+6.  `alignDomainsSmooth`: A variant of `alignDomainsRigid` which rigidly
+    aligns each domain then smooths the location of each atom based on
+    the displacement of nearby atoms, as described in Terwilliger et
+    al. (2023). Like the above function, it both accepts and returns
+    protein structures compatible with `bio3d` functions.
+
+7.  `viewStructure`: A function to visualize the provided structure with
     a 3D cartoon model. This function opens a browser window with the
     interactive 3D protein model.
 
@@ -119,14 +125,14 @@ provided by `citation("PDBCleanup")`.
 
 This package was created by Isaiah Hazelwood. The `selectResno`,
 `selectHighResolution`, and `selectOrdered` functions use the
-`atom.select` and `trim` functions from `bio3d`. The `alignDomains`
-function uses these `bio3d` alongside `fit.xyz` to perform domain
-alignments. The `selectOrdered` function uses the `foldIndexR` function
-from `idpr`. The `plotProteinQuality` function uses `ggplot2` to create
-plots. The `viewStructure` function uses `r3dmol` to create and
-visualize a 3D model of the protein structure. The author wrote all
-package functions referencing only documentation and [Anjali Silva’s
-testing
+`atom.select` and `trim` functions from `bio3d`. The `alignDomainsRigid`
+and `alignDomainsSmooth` functions use these `bio3d` functions alongside
+`fit.xyz` to perform domain alignments. The `selectOrdered` function
+uses the `foldIndexR` function from `idpr`. The `plotProteinQuality`
+function uses `ggplot2` to create plots. The `viewStructure` function
+uses `r3dmol` to create and visualize a 3D model of the protein
+structure. The author wrote all package functions referencing only
+documentation and [Anjali Silva’s testing
 package](https://github.com/anjalisilva/TestingPackage/tree/master). No
 generative AI tools were used in the development of this package.
 
@@ -169,6 +175,11 @@ predict whether a given protein sequence is intrinsically unfolded.
 Su W, Johnston B (2021). r3dmol: Create Interactive 3D Visualizations of
 Molecular Data. R package version 0.1.2,
 <https://CRAN.R-project.org/package=r3dmol>.
+
+Terwilliger, T.C., Liebschner, D., Croll, T.I. et al. AlphaFold
+predictions are valuable hypotheses and accelerate but do not replace
+experimental structure determination. *Nat Methods* (2023).
+<https://doi.org./10.1038/s41592-023-02087-4>
 
 Varadi M., Anyango S., Deshpande M., et al. AlphaFold Protein Structure
 Database: massively expanding the structural coverage of
