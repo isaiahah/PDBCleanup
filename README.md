@@ -139,6 +139,11 @@ contributions. To submit an issue, use the GitHub issues.
 
 ## References
 
+Chang W, Cheng J, Allaire J, Sievert C, Schloerke B, Xie Y, Allen J,
+McPherson J, Dipert A, Borges B (2023). *shiny: Web Application
+Framework for R*. R package version 1.8.0,
+<https://CRAN.R-project.org/package=shiny>.
+
 Grant, B.J. et al. (2006) *Bioinformatics* 22, 2695–2696.
 
 Grinter R, Leung PM, Wijeyewickrema LC, Littler D, Beckham S, Pike RN,
