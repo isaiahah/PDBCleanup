@@ -31,7 +31,10 @@ ls("package:PDBCleanup")
 
 ## Workflow
 
-We will show an average workflow with `PDBCleanup` on structures of a zinc protease in E. Coli. There are two structures for this protein: one from an experiment, recorded in the PDB with ID 6OFS, and one from AlphaFold.
+We will show an average workflow with `PDBCleanup` on structures of zinc protease Pqql in _E. Coli_ (Uniprot ID P31828). There are two structures for this protein provided in the package: 
+
+  1. `6ofs_experimental.pdb` contains an experimental structure uploaded to the PDB under ID 6ofs as part of the publication "Protase-associated import systems are widespread in Gram-negative bacteria" by Grinter R et al (2019). This file has been modified to remove HETATM and ANISOU lines from the file to reduce size.
+  2. `6ofs_predicted.pdb` contains a computationally predicted structure by AlphaFold2 uploaded to the AlphaFold database.
 
 ### Step 1: Loading structures
 
