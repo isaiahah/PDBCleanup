@@ -17,7 +17,8 @@ aligned to the fixed structure.}
 lists, where each outer item describes one domain and each inner item is
 a two-item list containing an integer vector of the domain's indices in
 the fixed protein and an integer vector of the domain's indices in the
-mobile protein.}
+mobile protein. Each pair must contain the same number of residues across
+structures.}
 }
 \value{
 A protein structure of class "pdb" with the residues from the mobile

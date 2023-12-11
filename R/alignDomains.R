@@ -14,7 +14,8 @@
 #'    lists, where each outer item describes one domain and each inner item is
 #'    a two-item list containing an integer vector of the domain's indices in
 #'    the fixed protein and an integer vector of the domain's indices in the
-#'    mobile protein.
+#'    mobile protein. Each pair must contain the same number of residues across
+#'    structures.
 #'
 #' @returns A protein structure of class "pdb" with the residues from the mobile
 #'    structure aligned to the fixed structure on each domain.
@@ -75,6 +76,13 @@ alignDomains <- function(fixed, mobile, domains) {
       stop("All domains must be length 2 lists: See alignDomains documentation")
     } else {
       ; # Valid domains
+    }
+  }
+  for (i in seq_along(domains)) {
+    if (length(domains[[i]][1]) != length(domains[[i]][2])) {
+      stop("Each domain pair should have an equal length in both proteins")
+    } else {
+      ; # Valid domain lengths
     }
   }
 
